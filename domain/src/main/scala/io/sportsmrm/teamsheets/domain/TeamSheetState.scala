@@ -34,7 +34,7 @@ case object EmptyTeamSheet extends TeamSheetState {
 }
 
 case class CreatedTeamSheet(uuid: UUID, date: LocalDate, team: Team, opponent: Opponent) extends TeamSheetState {
-  override def applyCommand(command: Command[_]): ReplyEffect = ???
+  override def applyCommand(command: Command[?]): ReplyEffect = ???
 
   override def applyEvent(event: Event): TeamSheetState = ???
 }

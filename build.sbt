@@ -1,6 +1,6 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.3.1"
+ThisBuild / scalaVersion := "3.4.0"
 
 val PekkoVersion = "1.0.2"
 val ScalaTestVersion = "3.2.17"
