@@ -2,11 +2,6 @@ package io.sportsmrm.teamsheets.domain
 
 import com.typesafe.config.ConfigFactory
 import io.sportsmrm.teamsheets.commands.{Command, CreateTeamSheet}
-import io.sportsmrm.teamsheets.domain.TeamSheetEntitySpec.{
-  FAREHAM_MENS_SECOND_TEAM,
-  MENS_FIRST_TEAM,
-  TEAM_SHEET_ID
-}
 import io.sportsmrm.teamsheets.events.{Event, TeamSheetCreated}
 import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team}
 import org.apache.pekko.Done
@@ -25,14 +20,6 @@ import java.util.UUID
 
 object TeamSheetEntitySpec {
   val TEAM_SHEET_ID: UUID = UUID.randomUUID()
-  val FAREHAM_MENS_SECOND_TEAM: Opponent = Opponent(
-    id = UUID.randomUUID(),
-    displayName = "Fareham 2nd Team"
-  )
-  val MENS_FIRST_TEAM: Team = Team(
-    id = UUID.randomUUID(),
-    displayName = "Men's 1st Team"
-  )
 }
 
 class TeamSheetEntitySpec
@@ -45,6 +32,9 @@ class TeamSheetEntitySpec
     with BeforeAndAfterEach
     with LogCapturing {
 
+  import io.sportsmrm.teamsheets.valueobjects.TestData._
+  import TeamSheetEntitySpec._
+  
   private val teamSheetTestKit =
     EventSourcedBehaviorTestKit[Command[?], Event, TeamSheetState](
       system,

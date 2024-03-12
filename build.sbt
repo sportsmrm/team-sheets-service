@@ -9,7 +9,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "team-sheets-service"
   )
-  .aggregate(domain)
+  .aggregate(domain,queries)
 
 lazy val valueObjects = (project in file("value-objects"))
   .settings(
@@ -43,4 +43,27 @@ lazy val domain = project
       "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion % Test
     )
   )
-  .dependsOn(commands, events)
+  .dependsOn(
+    commands,
+    events,
+    valueObjects % "compile->compile;test->test"
+  )
+
+lazy val queries = project
+  .settings(
+    name := "team-sheets-service-queries",
+    libraryDependencies ++= Seq(
+      "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.0.0",
+      "org.apache.pekko" %% "pekko-projection-r2dbc" % "1.0.0",
+      "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test,
+      "org.apache.pekko" %% "pekko-projection-testkit" % "1.0.0" % Test,
+      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
+      "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion % Test,
+      "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion % Test
+    )
+  )
+  .dependsOn(
+    events,
+    valueObjects % "compile->compile;test->test"
+  )
