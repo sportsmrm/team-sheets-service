@@ -3,7 +3,7 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.4.0"
 
 val PekkoVersion = "1.0.2"
-val ScalaTestVersion = "3.2.17"
+val ScalaTestVersion = "3.2.18"
 
 lazy val root = (project in file("."))
   .settings(
@@ -36,7 +36,7 @@ lazy val domain = project
     name := "team-sheets-service-domain",
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.4.14" % Test,
+      "ch.qos.logback" % "logback-classic" % "1.5.2" % Test,
       "org.apache.pekko" %% "pekko-persistence-testkit" % PekkoVersion % Test,
       "org.apache.pekko" %% "pekko-serialization-jackson" % PekkoVersion % Test,
       "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion % Test,
