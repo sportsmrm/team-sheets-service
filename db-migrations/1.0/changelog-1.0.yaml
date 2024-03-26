@@ -1,0 +1,22 @@
+databaseChangeLog:
+- changeSet:
+    id: create-roles
+    author: Alex Miller
+    changes:
+    - sqlFile:
+        dbms: "postgresql"
+        path: "1.0/create-roles.sql"
+- changeSet:
+    id: create-projection-management-tables
+    author: Alex Miller
+    changes:
+    - sqlFile:
+        dbms: "postgresql"
+        path: "1.0/projection-management.sql"
+- changeSet:
+    id: create-team-sheets-table
+    author: Alex Miller
+    changes:
+    - sqlFile:
+        dbms: "postgresql"
+        path: "1.0/team-sheets.sql"
