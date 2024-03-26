@@ -2,6 +2,7 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.4.0"
 
+val JooqVersion = "3.19.6"
 val PekkoVersion = "1.0.2"
 val ScalaTestVersion = "3.2.18"
 
@@ -56,6 +57,8 @@ lazy val queries = project
       "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
       "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.0.0",
       "org.apache.pekko" %% "pekko-projection-r2dbc" % "1.0.0",
+      "org.jooq" % "jooq" % JooqVersion,
+      "ch.qos.logback" % "logback-classic" % "1.5.2" % Test,
       "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test,
       "org.apache.pekko" %% "pekko-projection-testkit" % "1.0.0" % Test,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
@@ -64,6 +67,15 @@ lazy val queries = project
     )
   )
   .dependsOn(
+    configUtil,
     events,
     valueObjects % "compile->compile;test->test"
+  )
+
+lazy val configUtil = (project in file("util/config"))
+  .settings(
+    name := "config-util",
+    libraryDependencies ++= Seq(
+      "com.typesafe" % "config" % "1.4.3"
+    )
   )

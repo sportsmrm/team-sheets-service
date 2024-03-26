@@ -34,7 +34,7 @@ class TeamSheetEntitySpec
 
   import io.sportsmrm.teamsheets.valueobjects.TestData._
   import TeamSheetEntitySpec._
-  
+
   private val teamSheetTestKit =
     EventSourcedBehaviorTestKit[Command[?], Event, TeamSheetState](
       system,
