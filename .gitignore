@@ -199,7 +199,6 @@ Temporary Items
 # Simple Build Tool
 # http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
 
-.bsp/
 dist/*
 target/
 lib_managed/
@@ -207,5 +206,13 @@ src_managed/
 project/boot/
 project/plugins/project/
 .history
+.bsp/
 .cache
+.ivy2/
 .lib/
+.sbt/
+
+# Ignored files
+db-migrations/changelog.properties
+liquibase.properties
+.secrets/

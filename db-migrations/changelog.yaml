@@ -1,0 +1,9 @@
+databaseChangeLog:
+- property:
+    name: db.name
+    value: team_sheets
+- property:
+    file: "changelog.properties"
+
+- include:
+    file: "1.0/changelog-1.0.yaml"
