@@ -3,14 +3,42 @@ on:
   pull_request:
   push:
 jobs:
+  generate_passwords:
+    runs-on: ubuntu-latest
+    outputs:
+      root_password: ${{ steps.generate_passwords.outputs.root_password }}
+      user_password: ${{ steps.generate_passwords.outputs.user_password }}
+    steps:
+      - name: Generate DB Passwords
+        id: generate_passwords
+        run: |
+          root_password=$(tr -dc '!#%&(-9<-_a-~' < /dev/urandom | head -c 16)
+          user_password=$(tr -dc '!#%&(-9<-_a-~' < /dev/urandom | head -c 16)
+          
+          echo "### Output Variables"
+          echo "| Password      | Value            |"
+          echo "| ------------- | ---------------- |"
+          echo "| root_password | $root_password   |"
+          echo "| user_password | $user_password   |"
+          
+          echo "root_password=$root_password" >> "$GITHUB_OUTPUT"
+          echo "user_password=$user_password" >> "$GITHUB_OUTPUT"
   test:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            java: 21
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    needs: generate_passwords
+    services:
+      test_db:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: ${{needs.generate_passwords.outputs.root_password}}
+          POSTGRES_DB: team_sheets
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     env:
       # define Java options for both official sbt and sbt-extras
       JAVA_OPTS: -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
@@ -18,13 +46,46 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Secrets
+        shell: bash
+        env:
+          root_password: ${{needs.generate_passwords.outputs.root_password}}
+          user_password: ${{needs.generate_passwords.outputs.user_password}}
+        run: |
+          echo "### Input Variables"
+          echo "| Password      | Value            |"
+          echo "| ------------- | ---------------- |"
+          echo "| root_password | ${{needs.generate_passwords.outputs.root_password}} |"
+          echo "| user_password | ${{needs.generate_passwords.outputs.user_password}} |"
+
+          if [ ! -d .secrets ]; then
+            mkdir .secrets
+          fi
+          
+          printf "%s" "$root_password" > ".secrets/db_superuser.passwd"
+          printf "%s" "$user_password" > ".secrets/db_user.passwd"
+          ./generate_secrets
+      - name: Setup Database
+        uses: liquibase-github-actions/update@v4.26.0
+        with:
+          url: jdbc:postgresql://test_db:5432/team_sheets
+          changelogFile: changelog.yaml
+          username: postgres
+          password: ${{needs.generate_passwords.outputs.root_password}}
+          classpath: db-migrations
+          missingPropertyMode: error
       - name: Setup JDK
         uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: ${{ matrix.java }}
+          java-version: 21
           cache: sbt
       - name: Build and test
         shell: bash
+        env:
+          DB_PASSWORD_FILE: .secrets/db_user.passwd
         run: |
+          echo "$DB_PASSWORD_FILE"
+          echo "$(cat $DB_PASSWORD_FILE)"
+          
           sbt -v "scalafmtCheckAll; +test;"
