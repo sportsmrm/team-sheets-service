@@ -2,6 +2,7 @@ name: CI
 on:
   pull_request:
   push:
+  workflow_dispatch:
 jobs:
   generate_passwords:
     runs-on: ubuntu-latest
