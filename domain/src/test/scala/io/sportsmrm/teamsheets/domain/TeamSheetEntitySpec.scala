@@ -3,7 +3,6 @@ package io.sportsmrm.teamsheets.domain
 import com.typesafe.config.ConfigFactory
 import io.sportsmrm.teamsheets.commands.{Command, CreateTeamSheet}
 import io.sportsmrm.teamsheets.events.{Event, TeamSheetCreated}
-import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team}
 import org.apache.pekko.Done
 import org.apache.pekko.actor.testkit.typed.scaladsl.{
   LogCapturing,
@@ -12,7 +11,6 @@ import org.apache.pekko.actor.testkit.typed.scaladsl.{
 import org.apache.pekko.pattern.StatusReply
 import org.apache.pekko.persistence.testkit.scaladsl.EventSourcedBehaviorTestKit
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import java.time.LocalDate

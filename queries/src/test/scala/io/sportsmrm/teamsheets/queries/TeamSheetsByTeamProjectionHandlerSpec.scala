@@ -3,40 +3,32 @@ package io.sportsmrm.teamsheets.queries
 import com.typesafe.config.{
   ConfigFactory,
   ConfigParseOptions,
-  ConfigResolveOptions,
-  ConfigResolver,
-  ConfigValue,
-  ConfigValueFactory
+  ConfigResolveOptions
 }
 import io.sportsmrm.teamsheets.events.{Event, TeamSheetCreated}
 import io.sportsmrm.teamsheets.valueobjects.TeamSheet
 import io.sportsmrm.util.config.DockerSecretConfigResolver
-import org.apache.pekko.{Done, NotUsed}
+import org.apache.pekko.NotUsed
 import org.apache.pekko.actor.testkit.typed.scaladsl.{
   LogCapturing,
   ScalaTestWithActorTestKit
 }
 import org.apache.pekko.persistence.query.Offset
 import org.apache.pekko.persistence.query.typed.EventEnvelope
-import org.apache.pekko.persistence.typed.PersistenceId
 import org.apache.pekko.projection.ProjectionId
 import org.apache.pekko.projection.r2dbc.scaladsl.R2dbcProjection
 import org.apache.pekko.projection.testkit.scaladsl.{
   ProjectionTestKit,
-  TestProjection,
   TestSourceProvider
 }
 import org.apache.pekko.stream.scaladsl.Source
-import org.jooq.impl.DSL
 import org.scalatest.enablers.Emptiness
-import org.scalatest.matchers.{MatchResult, Matcher}
-import org.scalatest.wordspec.{AnyWordSpecLike, AsyncWordSpecLike}
+import org.scalatest.wordspec.AnyWordSpecLike
 
 import java.time.LocalDate
 import java.util.UUID
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.util.{Failure, Success, Try, Using}
 
 class TeamSheetsByTeamProjectionHandlerSpec
     extends ScalaTestWithActorTestKit(
@@ -65,10 +57,9 @@ class TeamSheetsByTeamProjectionHandlerSpec
     }
 
   import io.sportsmrm.teamsheets.valueobjects.TestData._
-  import Emptiness._
 
   "The TeamSheets Projection Handler" when {
-    val handler = TeamSheetsProjectionHandler()
+    TeamSheetsProjectionHandler()
     val teamSheetId = UUID.randomUUID()
 
     "receiving a TeamSheetAddedEvent" should {

@@ -88,4 +88,4 @@ jobs:
           echo "$DB_PASSWORD_FILE"
           echo "$(cat $DB_PASSWORD_FILE)"
           
-          sbt -v "scalafmtCheckAll; scalafix --check; +test;"
+          sbt -v "scalafmtCheckAll; scalafixAll --check; +test;"
