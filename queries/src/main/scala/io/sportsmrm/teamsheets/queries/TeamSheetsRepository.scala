@@ -1,20 +1,15 @@
 package io.sportsmrm.teamsheets.queries
 
-import io.r2dbc.spi.{Connection, ConnectionFactory, ConnectionFactoryMetadata}
 import io.sportsmrm.teamsheets.queries.jooq.JooqTeamSheetsRepository
 import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team, TeamSheet}
-import org.apache.pekko.{Done, NotUsed}
 import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.persistence.r2dbc.ConnectionFactoryProvider
 import org.apache.pekko.projection.r2dbc.scaladsl.R2dbcSession
-import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.{Done, NotUsed}
+import org.jooq.SQLDialect
 import org.jooq.conf.Settings
-import org.jooq.{Record6, RecordType, SQLDialect}
-import org.jooq.impl.{CustomRecord, CustomTable, DSL, SQLDataType, TableImpl}
-import org.jooq.impl.DSL.*
-import org.jooq.tools.r2dbc.LoggingConnection
-import org.reactivestreams.{Processor, Publisher, Subscriber, Subscription}
+import org.jooq.impl.DSL
 
 import java.time.LocalDate
 import java.util.UUID

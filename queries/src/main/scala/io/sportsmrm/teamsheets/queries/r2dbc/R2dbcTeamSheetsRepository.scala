@@ -3,8 +3,8 @@ package io.sportsmrm.teamsheets.queries.r2dbc
 import io.sportsmrm.teamsheets.queries.TeamSheetsRepository
 import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team, TeamSheet}
 import org.apache.pekko.projection.r2dbc.scaladsl.R2dbcSession
-import org.apache.pekko.{Done, NotUsed}
 import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.{Done, NotUsed}
 
 import java.time.LocalDate
 import java.util.UUID
