@@ -12,8 +12,8 @@ jobs:
       - name: Generate DB Passwords
         id: generate_passwords
         run: |
-          root_password=$(tr -dc '!#%&(-9<-_a-~' < /dev/urandom | head -c 16)
-          user_password=$(tr -dc '!#%&(-9<-_a-~' < /dev/urandom | head -c 16)
+          root_password=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 16)
+          user_password=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 16)
           
           echo "### Output Variables"
           echo "| Password      | Value            |"
