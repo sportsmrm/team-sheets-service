@@ -4,8 +4,8 @@ import io.sportsmrm.teamsheets.queries.TeamSheetsRepository
 import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team, TeamSheet}
 import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.stream.Materializer
-import org.apache.pekko.{Done, NotUsed}
 import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.{Done, NotUsed}
 import org.jooq.DSLContext
 
 import java.time.LocalDate

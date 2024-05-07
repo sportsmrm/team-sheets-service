@@ -1,6 +1,6 @@
 package io.sportsmrm.teamsheets.queries
 
-import io.sportsmrm.teamsheets.events.Event
+import io.sportsmrm.teamsheets.events.Event // scalafix:ok
 import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team}
 import org.apache.pekko.Done
 import org.apache.pekko.actor.typed.ActorSystem

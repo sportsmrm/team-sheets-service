@@ -1,6 +1,13 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.4.0"
+ThisBuild / scalaVersion := "3.4.1"
+ThisBuild / scalaBinaryVersion := "3"
+
+ThisBuild / scalacOptions ++= Seq("-Wunused:all")
+
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
+
 
 val JooqVersion = "3.19.6"
 val PekkoVersion = "1.0.2"
