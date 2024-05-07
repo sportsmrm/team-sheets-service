@@ -1,3 +1,5 @@
+import Dependencies._
+
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.4.1"
@@ -7,11 +9,6 @@ ThisBuild / scalacOptions ++= Seq("-Wunused:all")
 
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
-
-
-val JooqVersion = "3.19.6"
-val PekkoVersion = "1.0.2"
-val ScalaTestVersion = "3.2.18"
 
 lazy val root = (project in file("."))
   .settings(
@@ -28,7 +25,7 @@ lazy val commands = project
   .settings(
     name := "team-sheets-service-commands",
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion
+      PekkoActorTyped
     )
   )
   .dependsOn(valueObjects)
@@ -43,12 +40,12 @@ lazy val domain = project
   .settings(
     name := "team-sheets-service-domain",
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.5.2" % Test,
-      "org.apache.pekko" %% "pekko-persistence-testkit" % PekkoVersion % Test,
-      "org.apache.pekko" %% "pekko-serialization-jackson" % PekkoVersion % Test,
-      "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion % Test,
-      "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion % Test
+      PekkoPersistenceTyped,
+      LogBackClassic % Test,
+      PekkoPersistenceTestkit % Test,
+      PekkoSerializationJackson % Test,
+      ScalaTestShouldMatchers % Test,
+      ScalaTestWordSpec % Test
     )
   )
   .dependsOn(
@@ -61,16 +58,16 @@ lazy val queries = project
   .settings(
     name := "team-sheets-service-queries",
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
-      "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.0.0",
-      "org.apache.pekko" %% "pekko-projection-r2dbc" % "1.0.0",
-      "org.jooq" % "jooq" % JooqVersion,
-      "ch.qos.logback" % "logback-classic" % "1.5.2" % Test,
-      "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test,
-      "org.apache.pekko" %% "pekko-projection-testkit" % "1.0.0" % Test,
-      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
-      "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion % Test,
-      "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion % Test
+      PekkoPersistenceTyped,
+      Jooq,
+      PekkoProjectionEventSourced,
+      PekkoProjectionR2dbc,
+      LogBackClassic % Test,
+      PekkoActorTestkitTyped % Test,
+      PekkoProjectionTestkit % Test,
+      PekkoStreamTestkit % Test,
+      ScalaTestShouldMatchers % Test,
+      ScalaTestWordSpec % Test
     )
   )
   .dependsOn(
@@ -83,6 +80,6 @@ lazy val configUtil = (project in file("util/config"))
   .settings(
     name := "config-util",
     libraryDependencies ++= Seq(
-      "com.typesafe" % "config" % "1.4.3"
+      TypesafeConfig
     )
   )
