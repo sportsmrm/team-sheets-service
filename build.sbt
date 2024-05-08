@@ -76,6 +76,14 @@ lazy val queries = project
     valueObjects % "compile->compile;test->test"
   )
 
+lazy val specs = project
+  .enablePlugins(CucumberPlugin)
+  .settings(
+    libraryDependencies ++= Seq(
+      CucumberScala
+    )
+  )
+
 lazy val configUtil = (project in file("util/config"))
   .settings(
     name := "config-util",

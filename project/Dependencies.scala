@@ -1,5 +1,8 @@
 import sbt._
 object Dependencies {
+  val CucumberScala = "io.cucumber" %% "cucumber-scala" % "8.22.0"
+
+
   val JooqVersion = "3.19.8"
 
   val Jooq = "org.jooq" % "jooq" % JooqVersion
