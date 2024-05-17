@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.sportsmrm.teamsheets.grpc";
+
+package sportsmrm.teamsheets;
+
+import "scalapb/scalapb.proto";
+import "options.proto";
+
+option (scalapb.options) = {
+  field_transformations: [
+    {
+      when: {
+        options {
+          [sportsmrm.teamsheets.opts]{type : UUID}
+        }
+        type: TYPE_STRING
+      }
+      set : {[scalapb.field] {type : 'java.util.UUID'}}
+    }
+  ]
+};
+
+service TeamSheetsService {
+  rpc CreateTeamSheet(CreateTeamSheetRequest) returns (CreateTeamSheetResponse);
+}
+
+message CreateTeamSheetResponse {
+  string id = 1 [(opts).type = UUID];
+}
+
+message Team {
+  string id = 1           [(opts).type = UUID];
+  string display_name = 2;
+}
+
+message Opponent {
+  string id = 1             [(opts).type = UUID];
+  string display_name = 2;
+}
+
+
+message CreateTeamSheetRequest {
+  string correlation_id = 1;
+
+  string date = 2;
+  Team team = 3;
+  Opponent opponent = 4;
+}

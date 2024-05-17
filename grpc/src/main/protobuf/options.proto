@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.sportsmrm.teamsheets.grpc";
+
+package sportsmrm.teamsheets;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+  optional SportsMrmOptions opts = 50001;
+}
+
+message SportsMrmOptions {
+  optional Type type = 1;
+}
+
+enum Type {
+  UUID = 0;
+}

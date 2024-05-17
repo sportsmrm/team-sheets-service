@@ -8,13 +8,18 @@ object Dependencies {
   val Jooq = "org.jooq" % "jooq" % JooqVersion
 
 
-  val LogBackClassic = "ch.qos.logback" % "logback-classic" % "1.5.6"
+  val LogbackVersion = "1.5.6"
 
+  val LogbackClassic = "ch.qos.logback" % "logback-classic" % LogbackVersion
+  val LogbackCore = "ch.qos.logback" % "logback-core" % LogbackVersion
 
   val PekkoVersion = "1.0.2"
 
   val PekkoActorTestkitTyped = "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion
   val PekkoActorTyped = "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion
+  val PekkoClusterShardingTyped = "org.apache.pekko" %% "pekko-cluster-sharding-typed" % PekkoVersion
+  val PekkoClusterTyped = "org.apache.pekko" %% "pekko-cluster-typed" % PekkoVersion
+  val PekkoGrpcRuntime = "org.apache.pekko" %% "pekko-grpc-runtime" % PekkoVersion
   val PekkoPersistenceTestkit = "org.apache.pekko" %% "pekko-persistence-testkit" % PekkoVersion
   val PekkoPersistenceTyped = "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion
   val PekkoProjectionEventSourced = "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.0.0"
@@ -22,6 +27,9 @@ object Dependencies {
   val PekkoProjectionTestkit = "org.apache.pekko" %% "pekko-projection-testkit" % "1.0.0"
   val PekkoSerializationJackson = "org.apache.pekko" %% "pekko-serialization-jackson" % PekkoVersion
   val PekkoStreamTestkit = "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion
+
+
+  val ScalaPBRuntime = "com.thesamet.scalapb" %% "scalapb-runtime" % "0.11.13"
 
 
   val ScalaTestVersion = "3.2.18"

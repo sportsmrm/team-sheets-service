@@ -1,4 +1,6 @@
-import Dependencies._
+import Dependencies.*
+import sbt.Compile
+import sbtprotoc.ProtocPlugin.autoImport.PB
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
@@ -41,7 +43,7 @@ lazy val domain = project
     name := "team-sheets-service-domain",
     libraryDependencies ++= Seq(
       PekkoPersistenceTyped,
-      LogBackClassic % Test,
+      LogbackClassic % Test,
       PekkoPersistenceTestkit % Test,
       PekkoSerializationJackson % Test,
       ScalaTestShouldMatchers % Test,
@@ -62,7 +64,7 @@ lazy val queries = project
       Jooq,
       PekkoProjectionEventSourced,
       PekkoProjectionR2dbc,
-      LogBackClassic % Test,
+      LogbackClassic % Test,
       PekkoActorTestkitTyped % Test,
       PekkoProjectionTestkit % Test,
       PekkoStreamTestkit % Test,
@@ -76,12 +78,24 @@ lazy val queries = project
     valueObjects % "compile->compile;test->test"
   )
 
+lazy val grpcBase = (project in file("grpc"))
+  .settings(
+    libraryDependencies ++= Seq(
+      ScalaPBRuntime
+    ),
+    Compile / unmanagedResourceDirectories ++= (Compile / PB.protoSources).value
+  )
+
 lazy val specs = project
-  .enablePlugins(CucumberPlugin)
+  .enablePlugins(CucumberPlugin, PekkoGrpcPlugin)
+  .dependsOn(grpcBase)
   .settings(
     libraryDependencies ++= Seq(
       CucumberScala
-    )
+    ),
+    pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Client),
+    pekkoGrpcCodeGeneratorSettings += "scala3_sources",
+    Compile / PB.protoSources ++= (grpcBase / Compile / PB.protoSources).value
   )
 
 lazy val configUtil = (project in file("util/config"))
