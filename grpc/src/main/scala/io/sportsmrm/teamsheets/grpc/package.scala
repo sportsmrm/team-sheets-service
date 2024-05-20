@@ -13,6 +13,6 @@ package object grpc {
     val bb = ByteBuffer.allocate(16)
     bb.putLong(uuid.getMostSignificantBits)
     bb.putLong(uuid.getLeastSignificantBits)
-    Base64.getEncoder.encodeToString(bb.array())
+    Base64.getUrlEncoder.encodeToString(bb.array())
   })
 }

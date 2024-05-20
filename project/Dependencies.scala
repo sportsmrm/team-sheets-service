@@ -29,11 +29,15 @@ object Dependencies {
   val PekkoStreamTestkit = "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion
 
 
+  val PicoCli = "info.picocli" % "picocli" % "4.7.6"
+
+
   val ScalaPBRuntime = "com.thesamet.scalapb" %% "scalapb-runtime" % "0.11.13"
 
 
   val ScalaTestVersion = "3.2.18"
 
+  val ScalaTestFlatSpec = "org.scalatest" %% "scalatest-flatspec" % ScalaTestVersion
   val ScalaTestShouldMatchers = "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion
   val ScalaTestWordSpec = "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion
 

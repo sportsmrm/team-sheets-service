@@ -1,4 +1,6 @@
 import Dependencies.*
+
+import com.typesafe.sbt.packager.docker._
 import sbt.Compile
 import sbtprotoc.ProtocPlugin.autoImport.PB
 
@@ -81,9 +83,33 @@ lazy val queries = project
 lazy val grpcBase = (project in file("grpc"))
   .settings(
     libraryDependencies ++= Seq(
-      ScalaPBRuntime
+      ScalaPBRuntime,
+      ScalaTestShouldMatchers % Test,
+      ScalaTestFlatSpec % Test
     ),
     Compile / unmanagedResourceDirectories ++= (Compile / PB.protoSources).value
+  )
+
+lazy val grpcServer = (project in file("grpc/server"))
+  .enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin, PekkoGrpcPlugin)
+  .dependsOn(grpcBase, commands)
+  .settings(
+    libraryDependencies ++= Seq(
+      LogbackClassic,
+      LogbackCore,
+      PekkoActorTyped,
+      PekkoClusterShardingTyped,
+      PekkoClusterTyped,
+      PicoCli
+    ),
+    pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),
+    pekkoGrpcCodeGeneratorSettings += "scala3_sources",
+    Compile / PB.protoSources ++= (grpcBase / Compile / PB.protoSources).value,
+    Docker / packageName := "sportsmrm/team-sheets-service",
+    dockerUpdateLatest := true,
+    dockerBaseImage := "eclipse-temurin:21-jre-alpine",
+    Docker / daemonUser := "teamsheets_server",
+    dockerCommands += ExecCmd("CMD", "serve","--http-interface", "0.0.0.0")
   )
 
 lazy val specs = project

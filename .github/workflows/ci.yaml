@@ -101,9 +101,16 @@ jobs:
           distribution: temurin
           java-version: 21
           cache: sbt
+      - name: Build Server
+        shell: bash
+        run: sbt -v "grpcServer / docker:publishLocal"
       - name: BDD Tests
         shell: bash
         env:
           DB_PASSWORD_FILE: .secrets/db_user.passwd
         run: |
+          docker compose up -d server
           sbt -v "specs / cucumber"
+          result = $?
+          docker compose down
+          exit $result
