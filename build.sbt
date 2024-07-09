@@ -6,7 +6,7 @@ import sbtprotoc.ProtocPlugin.autoImport.PB
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.4.1"
+ThisBuild / scalaVersion := "3.4.2"
 ThisBuild / scalaBinaryVersion := "3"
 
 ThisBuild / scalacOptions ++= Seq("-Wunused:all")
@@ -18,7 +18,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "team-sheets-service"
   )
-  .aggregate(domain,queries)
+  .aggregate(domain,queries, grpcServer)
 
 lazy val valueObjects = (project in file("value-objects"))
   .settings(
@@ -92,7 +92,7 @@ lazy val grpcBase = (project in file("grpc"))
 
 lazy val grpcServer = (project in file("grpc/server"))
   .enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin, PekkoGrpcPlugin)
-  .dependsOn(grpcBase, commands)
+  .dependsOn(grpcBase, commands, domain, configUtil)
   .settings(
     libraryDependencies ++= Seq(
       LogbackClassic,
@@ -100,6 +100,8 @@ lazy val grpcServer = (project in file("grpc/server"))
       PekkoActorTyped,
       PekkoClusterShardingTyped,
       PekkoClusterTyped,
+      PekkoSerializationJackson,
+      PekkoPersistenceR2dbc,
       PicoCli
     ),
     pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),

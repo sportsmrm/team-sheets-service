@@ -1,9 +1,9 @@
 import sbt.Keys.{Classpath, fullClasspath, thisProject}
 import sbt.OutputStrategy.StdoutOutput
 import sbt.PluginTrigger.NoTrigger
-import sbt.librarymanagement.Configurations.Runtime
+import sbt.librarymanagement.Configurations.{Runtime, Test}
 import sbt.plugins.JvmPlugin
-import sbt.{AutoPlugin, Def, Fork, ForkOptions, MessageOnlyException, Run, Setting, inConfig, inputKey, settingKey, taskKey}
+import sbt.{AutoPlugin, Def, Fork, ForkOptions, MessageOnlyException, inConfig, settingKey, taskKey}
 
 
 object CucumberPlugin extends AutoPlugin {
@@ -14,12 +14,11 @@ object CucumberPlugin extends AutoPlugin {
     lazy val cucumberScenariosDir = settingKey[Seq[String]]("The scenarios to run. Defaults to those in the 'features' directory.")
   }
 
-  import autoImport._
+  import autoImport.*
   lazy val baseCucumberSettings: Seq[Def.Setting[_]] = Seq(
-    cucumber := Cucumber((Runtime / fullClasspath).value, cucumberScenariosDir.value),
+    cucumber := Cucumber((Test / fullClasspath).value, cucumberScenariosDir.value),
     cucumberScenariosDir := Seq((thisProject).value.base + "/features")
   )
-  import autoImport.*
   override lazy val projectSettings = inConfig(Runtime)(baseCucumberSettings)
 }
 

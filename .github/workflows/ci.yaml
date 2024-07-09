@@ -103,12 +103,11 @@ jobs:
           cache: sbt
       - name: Build Server
         shell: bash
-        run: sbt -v "grpcServer / docker:publishLocal"
-      - name: BDD Tests
+        run: sbt -v "grpcServer / Docker / publishLocal"
+      - name: Execute BDD Tests
         shell: bash
-        env:
-          DB_PASSWORD_FILE: .secrets/db_user.passwd
         run: |
+          docker compose run generate_secrets
           docker compose up -d server
           sbt -v "specs / cucumber"
           result = $?

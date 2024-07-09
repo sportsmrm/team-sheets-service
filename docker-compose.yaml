@@ -1,4 +1,3 @@
-version: "2"
 services:
   generate_secrets:
     image: bash:5.2.26
@@ -18,7 +17,7 @@ services:
       - 5432:5432
     secrets:
       - db_superuser_password
-  setup_db:
+  setup_test_db:
     depends_on:
       generate_secrets:
         condition: service_completed_successfully
@@ -42,7 +41,7 @@ services:
         condition: service_completed_successfully
       test_db:
         condition: service_started
-      setup_db:
+      setup_test_db:
         condition: service_completed_successfully
     image: sbtscala/scala-sbt:eclipse-temurin-jammy-21.0.2_13_1.9.8_3.3.1
     stdin_open: true
@@ -57,10 +56,54 @@ services:
     secrets:
       - db_user_password
 
+  db:
+    depends_on:
+      generate_secrets:
+        condition: service_completed_successfully
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: team_sheets
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_superuser_password
+    ports:
+      - 5432:5432
+    secrets:
+      - db_superuser_password
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  setup_db:
+    depends_on:
+      generate_secrets:
+        condition: service_completed_successfully
+      db:
+        condition: service_started
+    image: liquibase/liquibase
+    volumes:
+      - ./db-migrations:/liquibase/changelog
+    secrets:
+      - db_superuser_password
+    command:
+      - "--defaultsFile=/liquibase/changelog/liquibase.properties"
+      - "update"
+      - "--classpath=/liquibase/changelog"
+      - "--url=jdbc:postgresql://db:5432/team_sheets"
+      - "--username=postgres"
+      - "--changelog-file=changelog.yaml"
+
   server:
     image: sportsmrm/team-sheets-service
+    depends_on:
+      db:
+        condition: service_started
+      setup_db:
+        condition: service_completed_successfully
+    environment:
+      DB_HOST: db
+      DB_PASSWORD_FILE: /run/secrets/db_user_password
     ports:
       - "8080:8080"
+    secrets:
+      - db_user_password
 
 secrets:
   db_superuser_password:
@@ -69,5 +112,6 @@ secrets:
     file: .secrets/db_user.passwd
 volumes:
   sbt-cache:
+  db:
 
 

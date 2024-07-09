@@ -20,6 +20,7 @@ object Dependencies {
   val PekkoClusterShardingTyped = "org.apache.pekko" %% "pekko-cluster-sharding-typed" % PekkoVersion
   val PekkoClusterTyped = "org.apache.pekko" %% "pekko-cluster-typed" % PekkoVersion
   val PekkoGrpcRuntime = "org.apache.pekko" %% "pekko-grpc-runtime" % PekkoVersion
+  val PekkoPersistenceR2dbc = "org.apache.pekko" %% "pekko-persistence-r2dbc" % "1.0.0"
   val PekkoPersistenceTestkit = "org.apache.pekko" %% "pekko-persistence-testkit" % PekkoVersion
   val PekkoPersistenceTyped = "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion
   val PekkoProjectionEventSourced = "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.0.0"
