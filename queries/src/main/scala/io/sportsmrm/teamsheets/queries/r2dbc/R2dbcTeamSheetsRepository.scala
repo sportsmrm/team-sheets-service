@@ -13,7 +13,11 @@ import scala.concurrent.Future
 class R2dbcTeamSheetsRepository(private val session: R2dbcSession)
     extends TeamSheetsRepository {
 
-  override def teamSheetsForTeam(team: Team): Source[TeamSheet, NotUsed] = ???
+  override def teamSheetsForTeam(
+      teamId: UUID,
+      from: Option[LocalDate],
+      to: Option[LocalDate]
+  ): Source[TeamSheet, NotUsed] = ???
 
   override def upsertTeamSheet(
       id: UUID,

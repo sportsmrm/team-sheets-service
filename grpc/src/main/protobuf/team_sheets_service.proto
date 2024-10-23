@@ -24,10 +24,32 @@ option (scalapb.options) = {
 
 service TeamSheetsService {
   rpc CreateTeamSheet(CreateTeamSheetRequest) returns (CreateTeamSheetResponse);
+
+  rpc ListTeamSheets(ListTeamSheetsRequest) returns  (ListTeamSheetsResponse);
+}
+
+message CreateTeamSheetRequest {
+  string correlation_id = 1;
+
+  string date = 2;
+  Team team = 3;
+  Opponent opponent = 4;
 }
 
 message CreateTeamSheetResponse {
   string id = 1 [(opts).type = UUID];
+}
+
+message ListTeamSheetsRequest {
+  string parent = 1;
+  string filter = 2;
+  string page_token = 3;
+  int32  page_size = 4;
+}
+
+message ListTeamSheetsResponse {
+  repeated TeamSheet team_sheets = 1;
+  string next_page_token = 2;
 }
 
 message Team {
@@ -40,10 +62,8 @@ message Opponent {
   string display_name = 2;
 }
 
-
-message CreateTeamSheetRequest {
-  string correlation_id = 1;
-
+message TeamSheet {
+  string id = 1;
   string date = 2;
   Team team = 3;
   Opponent opponent = 4;

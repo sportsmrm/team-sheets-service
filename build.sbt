@@ -92,7 +92,7 @@ lazy val grpcBase = (project in file("grpc"))
 
 lazy val grpcServer = (project in file("grpc/server"))
   .enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin, PekkoGrpcPlugin)
-  .dependsOn(grpcBase, commands, domain, configUtil)
+  .dependsOn(grpcBase, commands, domain, queries, configUtil)
   .settings(
     libraryDependencies ++= Seq(
       LogbackClassic,
@@ -100,6 +100,7 @@ lazy val grpcServer = (project in file("grpc/server"))
       PekkoActorTyped,
       PekkoClusterShardingTyped,
       PekkoClusterTyped,
+      PekkoDiscovery % Runtime,
       PekkoSerializationJackson,
       PekkoPersistenceR2dbc,
       PicoCli
@@ -119,7 +120,12 @@ lazy val specs = project
   .dependsOn(grpcBase)
   .settings(
     libraryDependencies ++= Seq(
-      CucumberScala
+      CucumberScala,
+      PekkoActorTyped,
+      PekkoDiscovery % Runtime,
+      PekkoProtobufV3 % Runtime,
+      PekkoStream % Runtime,
+      ScalaTestShouldMatchers
     ),
     pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Client),
     pekkoGrpcCodeGeneratorSettings += "scala3_sources",

@@ -13,20 +13,22 @@ object Dependencies {
   val LogbackClassic = "ch.qos.logback" % "logback-classic" % LogbackVersion
   val LogbackCore = "ch.qos.logback" % "logback-core" % LogbackVersion
 
-  val PekkoVersion = "1.0.2"
+  val PekkoVersion = "1.1.2"
 
   val PekkoActorTestkitTyped = "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion
   val PekkoActorTyped = "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion
   val PekkoClusterShardingTyped = "org.apache.pekko" %% "pekko-cluster-sharding-typed" % PekkoVersion
   val PekkoClusterTyped = "org.apache.pekko" %% "pekko-cluster-typed" % PekkoVersion
-  val PekkoGrpcRuntime = "org.apache.pekko" %% "pekko-grpc-runtime" % PekkoVersion
+  val PekkoDiscovery = "org.apache.pekko" %% "pekko-discovery" % PekkoVersion
   val PekkoPersistenceR2dbc = "org.apache.pekko" %% "pekko-persistence-r2dbc" % "1.0.0"
   val PekkoPersistenceTestkit = "org.apache.pekko" %% "pekko-persistence-testkit" % PekkoVersion
   val PekkoPersistenceTyped = "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion
   val PekkoProjectionEventSourced = "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.0.0"
   val PekkoProjectionR2dbc = "org.apache.pekko" %% "pekko-projection-r2dbc" % "1.0.0"
   val PekkoProjectionTestkit = "org.apache.pekko" %% "pekko-projection-testkit" % "1.0.0"
+  val PekkoProtobufV3 = "org.apache.pekko" %% "pekko-protobuf-v3" % PekkoVersion
   val PekkoSerializationJackson = "org.apache.pekko" %% "pekko-serialization-jackson" % PekkoVersion
+  val PekkoStream = "org.apache.pekko" %% "pekko-stream" % PekkoVersion
   val PekkoStreamTestkit = "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion
 
 

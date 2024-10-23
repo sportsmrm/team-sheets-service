@@ -6,6 +6,7 @@ import com.typesafe.config.{
   ConfigResolveOptions
 }
 import io.sportsmrm.teamsheets.grpc.TeamSheetsServiceHandler
+import io.sportsmrm.teamsheets.queries.TeamSheetsRepository
 import io.sportsmrm.util.config.DockerSecretConfigResolver
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.Http
@@ -52,7 +53,11 @@ class Serve extends Callable[Int] {
 
     val service: HttpRequest => Future[HttpResponse] =
       TeamSheetsServiceHandler(
-        TeamSheetsServiceImpl(system.correlatorLocator, system.actorSystem)
+        TeamSheetsServiceImpl(
+          system.correlatorLocator,
+          TeamSheetsRepository(system.actorSystem),
+          system.actorSystem
+        )
       )
 
     val binding = Http(system.classicSystem)
