@@ -23,7 +23,7 @@ jobs:
           
           echo "root_password=$root_password" >> "$GITHUB_OUTPUT"
           echo "user_password=$user_password" >> "$GITHUB_OUTPUT"
-  test:
+  build:
     runs-on: ubuntu-latest
     needs: generate_passwords
     services:
@@ -80,7 +80,7 @@ jobs:
           distribution: temurin
           java-version: 21
           cache: sbt
-      - name: Build and test
+      - name: SBT Checks
         shell: bash
         env:
           DB_PASSWORD_FILE: .secrets/db_user.passwd
@@ -89,3 +89,27 @@ jobs:
           echo "$(cat $DB_PASSWORD_FILE)"
           
           sbt -v "scalafmtCheckAll; scalafixAll --check; +test;"
+
+  bdd_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: sbt
+      - name: Build Server
+        shell: bash
+        run: sbt -v "grpcServer / Docker / publishLocal"
+      - name: Execute BDD Tests
+        shell: bash
+        run: |
+          docker compose run generate_secrets
+          docker compose up -d server
+          sbt -v "specs / cucumber"
+          result=$?
+          docker compose down
+          exit $result

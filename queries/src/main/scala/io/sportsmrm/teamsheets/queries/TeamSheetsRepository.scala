@@ -1,7 +1,7 @@
 package io.sportsmrm.teamsheets.queries
 
 import io.sportsmrm.teamsheets.queries.jooq.JooqTeamSheetsRepository
-import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team, TeamSheet}
+import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team, TeamId, TeamSheet}
 import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.persistence.r2dbc.ConnectionFactoryProvider
 import org.apache.pekko.projection.r2dbc.scaladsl.R2dbcSession
@@ -39,7 +39,11 @@ object TeamSheetsRepository:
   }
 
 trait TeamSheetsRepository:
-  def teamSheetsForTeam(team: Team): Source[TeamSheet, NotUsed]
+  def teamSheetsForTeam(
+      teamId: TeamId,
+      from: Option[LocalDate] = None,
+      to: Option[LocalDate] = None
+  ): Source[TeamSheet, NotUsed]
   def upsertTeamSheet(
       id: UUID,
       sequenceNr: Long,

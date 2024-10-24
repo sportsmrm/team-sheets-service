@@ -16,10 +16,18 @@ class JooqTeamSheetsRepository(
     private val dsl: DSLContext,
     private val system: ActorSystem[?]
 ) extends TeamSheetsRepository {
-  override def teamSheetsForTeam(team: Team): Source[TeamSheet, NotUsed] = {
+  override def teamSheetsForTeam(
+      teamId: UUID,
+      from: Option[LocalDate],
+      to: Option[LocalDate]
+  ): Source[TeamSheet, NotUsed] = {
     Source
       .fromPublisher(
-        dsl.selectFrom(TEAM_SHEETS).where(TEAM_SHEETS.TEAM_ID.eq(team.id))
+        from.foldLeft(
+          to.foldLeft(
+            dsl.selectFrom(TEAM_SHEETS).where(TEAM_SHEETS.TEAM_ID.eq(teamId))
+          )((base, to) => base.and(TEAM_SHEETS.DATE.le(to)))
+        )((base, from) => base.and(TEAM_SHEETS.DATE.ge(from)))
       )
       .map(record =>
         TeamSheet(

@@ -65,7 +65,7 @@ class TeamSheetsByTeamProjectionHandlerSpec
     "receiving a TeamSheetAddedEvent" should {
       "insert the team sheet if it does not already exist" in {
         TeamSheetsRepository(system)
-          .teamSheetsForTeam(MENS_FIRST_TEAM) shouldBe empty
+          .teamSheetsForTeam(MENS_FIRST_TEAM.id) shouldBe empty
 
         val projection = R2dbcProjection.exactlyOnce(
           ProjectionId(UUID.randomUUID().toString, "001"),
@@ -93,7 +93,7 @@ class TeamSheetsByTeamProjectionHandlerSpec
         )(system)
         projectionTestKit.run(projection) {
           val result = TeamSheetsRepository(system)
-            .teamSheetsForTeam(MENS_FIRST_TEAM)
+            .teamSheetsForTeam(MENS_FIRST_TEAM.id)
             .runFold(List.empty[TeamSheet])((list, record) => {
               val result = list :+ record
               result

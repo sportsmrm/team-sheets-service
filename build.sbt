@@ -1,6 +1,12 @@
+import Dependencies.*
+
+import com.typesafe.sbt.packager.docker._
+import sbt.Compile
+import sbtprotoc.ProtocPlugin.autoImport.PB
+
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.4.1"
+ThisBuild / scalaVersion := "3.4.2"
 ThisBuild / scalaBinaryVersion := "3"
 
 ThisBuild / scalacOptions ++= Seq("-Wunused:all")
@@ -8,16 +14,11 @@ ThisBuild / scalacOptions ++= Seq("-Wunused:all")
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 
-
-val JooqVersion = "3.19.6"
-val PekkoVersion = "1.0.2"
-val ScalaTestVersion = "3.2.18"
-
 lazy val root = (project in file("."))
   .settings(
     name := "team-sheets-service"
   )
-  .aggregate(domain,queries)
+  .aggregate(domain,queries, grpcServer)
 
 lazy val valueObjects = (project in file("value-objects"))
   .settings(
@@ -28,7 +29,7 @@ lazy val commands = project
   .settings(
     name := "team-sheets-service-commands",
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion
+      PekkoActorTyped
     )
   )
   .dependsOn(valueObjects)
@@ -43,12 +44,12 @@ lazy val domain = project
   .settings(
     name := "team-sheets-service-domain",
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.5.2" % Test,
-      "org.apache.pekko" %% "pekko-persistence-testkit" % PekkoVersion % Test,
-      "org.apache.pekko" %% "pekko-serialization-jackson" % PekkoVersion % Test,
-      "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion % Test,
-      "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion % Test
+      PekkoPersistenceTyped,
+      LogbackClassic % Test,
+      PekkoPersistenceTestkit % Test,
+      PekkoSerializationJackson % Test,
+      ScalaTestShouldMatchers % Test,
+      ScalaTestWordSpec % Test
     )
   )
   .dependsOn(
@@ -61,16 +62,16 @@ lazy val queries = project
   .settings(
     name := "team-sheets-service-queries",
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
-      "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.0.0",
-      "org.apache.pekko" %% "pekko-projection-r2dbc" % "1.0.0",
-      "org.jooq" % "jooq" % JooqVersion,
-      "ch.qos.logback" % "logback-classic" % "1.5.2" % Test,
-      "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test,
-      "org.apache.pekko" %% "pekko-projection-testkit" % "1.0.0" % Test,
-      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
-      "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion % Test,
-      "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion % Test
+      PekkoPersistenceTyped,
+      Jooq,
+      PekkoProjectionEventSourced,
+      PekkoProjectionR2dbc,
+      LogbackClassic % Test,
+      PekkoActorTestkitTyped % Test,
+      PekkoProjectionTestkit % Test,
+      PekkoStreamTestkit % Test,
+      ScalaTestShouldMatchers % Test,
+      ScalaTestWordSpec % Test
     )
   )
   .dependsOn(
@@ -79,10 +80,62 @@ lazy val queries = project
     valueObjects % "compile->compile;test->test"
   )
 
+lazy val grpcBase = (project in file("grpc"))
+  .settings(
+    libraryDependencies ++= Seq(
+      ScalaPBRuntime,
+      ScalaTestShouldMatchers % Test,
+      ScalaTestFlatSpec % Test
+    ),
+    Compile / unmanagedResourceDirectories ++= (Compile / PB.protoSources).value
+  )
+
+lazy val grpcServer = (project in file("grpc/server"))
+  .enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin, PekkoGrpcPlugin)
+  .dependsOn(grpcBase, commands, domain, queries, configUtil)
+  .settings(
+    libraryDependencies ++= Seq(
+      LogbackClassic,
+      LogbackCore,
+      PekkoActorTyped,
+      PekkoClusterShardingTyped,
+      PekkoClusterTyped,
+      PekkoDiscovery % Runtime,
+      PekkoSerializationJackson,
+      PekkoPersistenceR2dbc,
+      PicoCli
+    ),
+    pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),
+    pekkoGrpcCodeGeneratorSettings += "scala3_sources",
+    Compile / PB.protoSources ++= (grpcBase / Compile / PB.protoSources).value,
+    Docker / packageName := "sportsmrm/team-sheets-service",
+    dockerUpdateLatest := true,
+    dockerBaseImage := "eclipse-temurin:21-jre-alpine",
+    Docker / daemonUser := "teamsheets_server",
+    dockerCommands += ExecCmd("CMD", "serve","--http-interface", "0.0.0.0")
+  )
+
+lazy val specs = project
+  .enablePlugins(CucumberPlugin, PekkoGrpcPlugin)
+  .dependsOn(grpcBase)
+  .settings(
+    libraryDependencies ++= Seq(
+      CucumberScala,
+      PekkoActorTyped,
+      PekkoDiscovery % Runtime,
+      PekkoProtobufV3 % Runtime,
+      PekkoStream % Runtime,
+      ScalaTestShouldMatchers
+    ),
+    pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Client),
+    pekkoGrpcCodeGeneratorSettings += "scala3_sources",
+    Compile / PB.protoSources ++= (grpcBase / Compile / PB.protoSources).value
+  )
+
 lazy val configUtil = (project in file("util/config"))
   .settings(
     name := "config-util",
     libraryDependencies ++= Seq(
-      "com.typesafe" % "config" % "1.4.3"
+      TypesafeConfig
     )
   )
