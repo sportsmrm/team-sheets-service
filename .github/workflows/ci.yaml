@@ -103,7 +103,7 @@ jobs:
           cache: sbt
       - name: Build Server
         shell: bash
-        run: sbt -v "grpcServer / Docker / publishLocal"
+        run: sbt -v "server / Docker / publishLocal"
       - name: Execute BDD Tests
         shell: bash
         run: |

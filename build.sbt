@@ -18,7 +18,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "team-sheets-service"
   )
-  .aggregate(domain,queries, grpcServer)
+  .aggregate(configUtil, domain, queries, server, specs)
 
 lazy val valueObjects = (project in file("value-objects"))
   .settings(
@@ -80,7 +80,7 @@ lazy val queries = project
     valueObjects % "compile->compile;test->test"
   )
 
-lazy val grpcBase = (project in file("grpc"))
+lazy val grpc = (project in file("grpc"))
   .settings(
     libraryDependencies ++= Seq(
       ScalaPBRuntime,
@@ -90,9 +90,9 @@ lazy val grpcBase = (project in file("grpc"))
     Compile / unmanagedResourceDirectories ++= (Compile / PB.protoSources).value
   )
 
-lazy val grpcServer = (project in file("grpc/server"))
+lazy val server = (project in file("server"))
   .enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin, PekkoGrpcPlugin)
-  .dependsOn(grpcBase, commands, domain, queries, configUtil)
+  .dependsOn(grpc, commands, domain, queries, configUtil)
   .settings(
     libraryDependencies ++= Seq(
       LogbackClassic,
@@ -107,7 +107,7 @@ lazy val grpcServer = (project in file("grpc/server"))
     ),
     pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),
     pekkoGrpcCodeGeneratorSettings += "scala3_sources",
-    Compile / PB.protoSources ++= (grpcBase / Compile / PB.protoSources).value,
+    Compile / PB.protoSources ++= (grpc / Compile / PB.protoSources).value,
     Docker / packageName := "sportsmrm/team-sheets-service",
     dockerUpdateLatest := true,
     dockerBaseImage := "eclipse-temurin:21-jre-alpine",
@@ -117,7 +117,7 @@ lazy val grpcServer = (project in file("grpc/server"))
 
 lazy val specs = project
   .enablePlugins(CucumberPlugin, PekkoGrpcPlugin)
-  .dependsOn(grpcBase)
+  .dependsOn(grpc)
   .settings(
     libraryDependencies ++= Seq(
       CucumberScala,
@@ -129,7 +129,7 @@ lazy val specs = project
     ),
     pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Client),
     pekkoGrpcCodeGeneratorSettings += "scala3_sources",
-    Compile / PB.protoSources ++= (grpcBase / Compile / PB.protoSources).value
+    Compile / PB.protoSources ++= (grpc / Compile / PB.protoSources).value
   )
 
 lazy val configUtil = (project in file("util/config"))
