@@ -15,10 +15,9 @@ import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.apache.pekko.grpc.GrpcClientSettings
 import org.apache.pekko.pattern.retry
 import org.scalactic.Equality
-import org.scalatest.Succeeded
 import org.scalatest.compatible.Assertion
 import org.scalatest.enablers.Containing
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers.*
 
 import java.nio.ByteBuffer
 import java.util.{Base64, UUID}
@@ -112,17 +111,18 @@ class StepDefinitions extends ScalaDsl with EN {
     } yield {
       retry(
         attempt = () => {
-          service
+          val result = service
             .listTeamSheets(
               ListTeamSheetsRequest(parent = "teams/" + uuidToBase64(t.id))
             )
             .map(result => result.teamSheets `should` contain(response.id))
+          result
         },
-        shouldRetry = (assertion: Assertion, exc: Throwable) => {
-          assertion ne Succeeded
-        },
+        shouldRetry = (result: Any, t: Throwable) => { t ne null },
         attempts = 10,
-        delay = 200.milliseconds
+        minBackoff = 100.milliseconds,
+        maxBackoff = 5.seconds,
+        randomFactor = 0
       )
     }
 
