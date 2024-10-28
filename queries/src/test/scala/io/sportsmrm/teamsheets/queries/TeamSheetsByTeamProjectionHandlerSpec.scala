@@ -28,7 +28,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import java.time.LocalDate
 import java.util.UUID
 import scala.concurrent.Await
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 class TeamSheetsByTeamProjectionHandlerSpec
     extends ScalaTestWithActorTestKit(
