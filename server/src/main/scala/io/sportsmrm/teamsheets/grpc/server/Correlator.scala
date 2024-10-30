@@ -1,8 +1,8 @@
 package io.sportsmrm.teamsheets.grpc.server
 
+import io.sportsmrm.teamsheets.commands as TeamSheet
 import io.sportsmrm.teamsheets.grpc.CreateTeamSheetResponse
 import io.sportsmrm.teamsheets.valueobjects.{Opponent, Team}
-import io.sportsmrm.teamsheets.{commands => TeamSheet}
 import org.apache.pekko.Done
 import org.apache.pekko.actor.typed.scaladsl.Behaviors
 import org.apache.pekko.actor.typed.{ActorRef, Behavior}

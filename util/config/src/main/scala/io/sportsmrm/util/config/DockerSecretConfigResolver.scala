@@ -7,10 +7,12 @@ import scala.util.{Failure, Success, Using}
 object DockerSecretConfigResolver {
   def apply(): DockerSecretConfigResolver = new DockerSecretConfigResolver(None)
 }
-class DockerSecretConfigResolver(private val fallback: Option[ConfigResolver] = None) extends ConfigResolver {
+class DockerSecretConfigResolver(
+    private val fallback: Option[ConfigResolver] = None
+) extends ConfigResolver {
 
   private def readFile(fileName: String): Option[ConfigValue] = {
-    Using(scala.io.Source.fromFile(fileName)) {source =>
+    Using(scala.io.Source.fromFile(fileName)) { source =>
       ConfigValueFactory.fromAnyRef(source.mkString, fileName)
     } match {
       case Success(value) => Some(value)
@@ -25,14 +27,13 @@ class DockerSecretConfigResolver(private val fallback: Option[ConfigResolver] = 
     val fileName = System.getenv(filePath)
     if (fileName != null) {
       readFile(fileName)
-    }
-    else
+    } else
       None
   }
   override def lookup(path: String): ConfigValue | Null = {
     getFromFile(path).getOrElse(fallback match
       case Some(fb) => fb.lookup(path)
-      case None => null
+      case None     => null
     )
   }
 

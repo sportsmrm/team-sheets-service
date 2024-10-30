@@ -19,7 +19,7 @@ import org.apache.pekko.util.Timeout
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 
 class TeamSheetsServiceImpl(
