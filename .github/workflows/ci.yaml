@@ -114,9 +114,16 @@ jobs:
       - name: Execute BDD Tests
         shell: bash
         run: |
+          set -x
+          
           docker compose run generate_secrets
           docker compose up -d server
+          set +e
           sbt -v "specs / cucumber"
           result=$?
+          
+          if [ "$result" != "0" ]; then
+            docker compose logs -n all server
+          fi
           docker compose down
           exit $result
