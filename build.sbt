@@ -83,7 +83,7 @@ lazy val queries = project
 lazy val grpc = (project in file("grpc"))
   .settings(
     libraryDependencies ++= Seq(
-      ScalaPBRuntime,
+      ScalaPBRuntime % "compile,protobuf,runtime",
       ScalaTestShouldMatchers % Test,
       ScalaTestFlatSpec % Test
     ),
@@ -91,10 +91,13 @@ lazy val grpc = (project in file("grpc"))
   )
 
 lazy val server = (project in file("server"))
-  .enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin, PekkoGrpcPlugin)
+  .enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin)
   .dependsOn(grpc, commands, domain, queries, configUtil)
   .settings(
     libraryDependencies ++= Seq(
+      GrpcCore,
+      GrpcNetty,
+      GrpcStub,
       LogbackClassic,
       LogbackCore,
       PekkoActorTyped,
@@ -103,10 +106,11 @@ lazy val server = (project in file("server"))
       PekkoDiscovery % Runtime,
       PekkoSerializationJackson,
       PekkoPersistenceR2dbc,
-      PicoCli
+      PicoCli,
+      ScalaPBRuntime,
+      ScalaPBRuntimeGrpc
     ),
-    pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),
-    pekkoGrpcCodeGeneratorSettings += "scala3_sources",
+    Compile / PB.targets := Seq(scalapb.gen(flatPackage=true) -> (Compile / sourceManaged).value / "scalapb"),
     Compile / PB.protoSources ++= (grpc / Compile / PB.protoSources).value,
     Docker / packageName := "sportsmrm/team-sheets-service",
     dockerUpdateLatest := true,

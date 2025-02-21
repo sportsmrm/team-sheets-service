@@ -6,13 +6,12 @@ import io.sportsmrm.teamsheets.grpc.{
   CreateTeamSheetResponse,
   ListTeamSheetsRequest,
   ListTeamSheetsResponse,
-  TeamSheetsService
+  TeamSheetsServiceGrpc
 }
 import io.sportsmrm.teamsheets.queries.TeamSheetsRepository
 import io.sportsmrm.teamsheets.valueobjects.TeamId
 import io.sportsmrm.teamsheets.{grpc, valueobjects}
 import org.apache.pekko.actor.typed.ActorSystem
-import org.apache.pekko.grpc.GrpcServiceException
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Sink
 import org.apache.pekko.util.Timeout
@@ -26,7 +25,7 @@ class TeamSheetsServiceImpl(
     val teamSheetCreator: CorrelatorLocator,
     val teamSheetsRepository: TeamSheetsRepository,
     val system: ActorSystem[?]
-) extends TeamSheetsService {
+) extends TeamSheetsServiceGrpc.TeamSheetsService {
 
   given ExecutionContext = system.executionContext
 
@@ -89,9 +88,9 @@ class TeamSheetsServiceImpl(
     catch
       case iae: IllegalArgumentException =>
         Future.failed(
-          new GrpcServiceException(
-            Status.INVALID_ARGUMENT.withDescription("Invalid parent")
-          )
+          Status.INVALID_ARGUMENT
+            .withDescription("Invalid parent")
+            .asException()
         )
 
 }
