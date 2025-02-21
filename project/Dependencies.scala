@@ -1,20 +1,20 @@
 import sbt._
 object Dependencies {
-  val CucumberScala = "io.cucumber" %% "cucumber-scala" % "8.22.0"
+  val CucumberScala = "io.cucumber" %% "cucumber-scala" % "8.26.1"
 
   val GrpcVersion = "1.70.0"
   val GrpcCore = "io.grpc" % "grpc-core" % GrpcVersion
   val GrpcNetty = "io.grpc" % "grpc-netty" % GrpcVersion
   val GrpcStub = "io.grpc" % "grpc-stub" % GrpcVersion
 
-  val JooqVersion = "3.19.8"
+  val JooqVersion = "3.20.1"
   val Jooq = "org.jooq" % "jooq" % JooqVersion
 
-  val LogbackVersion = "1.5.6"
+  val LogbackVersion = "1.5.16"
   val LogbackClassic = "ch.qos.logback" % "logback-classic" % LogbackVersion
   val LogbackCore = "ch.qos.logback" % "logback-core" % LogbackVersion
 
-  val PekkoVersion = "1.1.2"
+  val PekkoVersion = "1.1.3"
   val PekkoActorTestkitTyped = "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion
   val PekkoActorTyped = "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion
   val PekkoClusterShardingTyped = "org.apache.pekko" %% "pekko-cluster-sharding-typed" % PekkoVersion
@@ -37,7 +37,7 @@ object Dependencies {
   val ScalaPBRuntime = "com.thesamet.scalapb" %% "scalapb-runtime" % ScalaPBVersion
   val ScalaPBRuntimeGrpc = "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % ScalaPBVersion
 
-  val ScalaTestVersion = "3.2.18"
+  val ScalaTestVersion = "3.2.19"
   val ScalaTestFlatSpec = "org.scalatest" %% "scalatest-flatspec" % ScalaTestVersion
   val ScalaTestShouldMatchers = "org.scalatest" %% "scalatest-shouldmatchers" % ScalaTestVersion
   val ScalaTestWordSpec = "org.scalatest" %% "scalatest-wordspec" % ScalaTestVersion
