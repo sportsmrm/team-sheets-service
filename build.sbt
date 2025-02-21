@@ -114,7 +114,7 @@ lazy val server = (project in file("server"))
     Compile / PB.protoSources ++= (grpc / Compile / PB.protoSources).value,
     Docker / packageName := "sportsmrm/team-sheets-service",
     dockerUpdateLatest := true,
-    dockerBaseImage := "eclipse-temurin:21-jre-alpine",
+    dockerBaseImage := "eclipse-temurin:21-jre",
     Docker / daemonUser := "teamsheets_server",
     dockerCommands += ExecCmd("CMD", "serve","--http-interface", "0.0.0.0")
   )
