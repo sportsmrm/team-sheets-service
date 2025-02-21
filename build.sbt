@@ -110,6 +110,11 @@ lazy val server = (project in file("server"))
       ScalaPBRuntime,
       ScalaPBRuntimeGrpc
     ),
+    dependencyOverrides ++= Seq(
+      "io.netty" % "netty-codec-dns" % "4.1.110.Final",
+      "io.netty" % "netty-resolver-dns-native-macos" % "4.1.110.Final",
+      "io.netty" % "netty-transport-native-epoll" % "4.1.110.Final",
+    ),
     Compile / PB.targets := Seq(scalapb.gen(flatPackage=true) -> (Compile / sourceManaged).value / "scalapb"),
     Compile / PB.protoSources ++= (grpc / Compile / PB.protoSources).value,
     Docker / packageName := "sportsmrm/team-sheets-service",
