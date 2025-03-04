@@ -107,13 +107,16 @@ lazy val server = (project in file("server"))
       PekkoSerializationJackson,
       PekkoPersistenceR2dbc,
       PicoCli,
-      ScalaPBRuntime,
+      ScalaPBRuntime exclude("io.grpc", "grpc-netty-shaded"),
       ScalaPBRuntimeGrpc
     ),
     dependencyOverrides ++= Seq(
-      "io.netty" % "netty-codec-dns" % "4.1.110.Final",
-      "io.netty" % "netty-resolver-dns-native-macos" % "4.1.110.Final",
-      "io.netty" % "netty-transport-native-epoll" % "4.1.110.Final",
+      "io.netty" % "netty-codec-http2" % "4.1.119.Final",
+      "io.netty" % "netty-handler-proxy" % "4.1.119.Final",
+      "io.netty" % "netty-resolver-dns-native-macos" % "4.1.119.Final",
+      "io.netty" % "netty-transport-native-epoll" % "4.1.119.Final",
+      "io.netty.incubator" % "netty-incubator-codec-native-quic" % "0.0.63.Final",
+      "io.projectreactor.netty" % "reactor-netty-core" % "1.2.3"
     ),
     Compile / PB.targets := Seq(scalapb.gen(flatPackage=true) -> (Compile / sourceManaged).value / "scalapb"),
     Compile / PB.protoSources ++= (grpc / Compile / PB.protoSources).value,
