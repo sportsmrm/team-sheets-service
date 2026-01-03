@@ -15,14 +15,13 @@ import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.apache.pekko.grpc.GrpcClientSettings
 import org.apache.pekko.pattern.retry
 import org.scalactic.Equality
-import org.scalatest.compatible.Assertion
 import org.scalatest.enablers.Containing
 import org.scalatest.matchers.should.Matchers.*
 
 import java.nio.ByteBuffer
 import java.util.{Base64, UUID}
+import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, DurationInt}
-import scala.concurrent.{Await, ExecutionContext}
 
 object StepDefinitions {
   given sys: ActorSystem = ActorSystem("TeamSheetsClient")

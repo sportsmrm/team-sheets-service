@@ -87,7 +87,7 @@ class TeamSheetsServiceImpl(
         })
       result
     catch
-      case iae: IllegalArgumentException =>
+      case _: IllegalArgumentException =>
         Future.failed(
           new GrpcServiceException(
             Status.INVALID_ARGUMENT.withDescription("Invalid parent")
