@@ -66,6 +66,7 @@ lazy val queries = project
       Jooq,
       PekkoProjectionEventSourced,
       PekkoProjectionR2dbc,
+      PostgresqlR2dbcDriver % Test,
       LogbackClassic % Test,
       PekkoActorTestkitTyped % Test,
       PekkoProjectionTestkit % Test,
@@ -103,6 +104,7 @@ lazy val server = (project in file("server"))
       PekkoDiscovery % Runtime,
       PekkoSerializationJackson,
       PekkoPersistenceR2dbc,
+      PostgresqlR2dbcDriver,
       PicoCli
     ),
     pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),

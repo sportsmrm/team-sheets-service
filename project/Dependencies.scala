@@ -20,18 +20,28 @@ object Dependencies {
   val PekkoClusterShardingTyped = "org.apache.pekko" %% "pekko-cluster-sharding-typed" % PekkoVersion
   val PekkoClusterTyped = "org.apache.pekko" %% "pekko-cluster-typed" % PekkoVersion
   val PekkoDiscovery = "org.apache.pekko" %% "pekko-discovery" % PekkoVersion
-  val PekkoPersistenceR2dbc = "org.apache.pekko" %% "pekko-persistence-r2dbc" % "1.1.0"
   val PekkoPersistenceTestkit = "org.apache.pekko" %% "pekko-persistence-testkit" % PekkoVersion
   val PekkoPersistenceTyped = "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion
-  val PekkoProjectionEventSourced = "org.apache.pekko" %% "pekko-projection-eventsourced" % "1.1.0"
-  val PekkoProjectionR2dbc = "org.apache.pekko" %% "pekko-projection-r2dbc" % "1.1.0"
-  val PekkoProjectionTestkit = "org.apache.pekko" %% "pekko-projection-testkit" % "1.1.0"
   val PekkoProtobufV3 = "org.apache.pekko" %% "pekko-protobuf-v3" % PekkoVersion
   val PekkoSerializationJackson = "org.apache.pekko" %% "pekko-serialization-jackson" % PekkoVersion
   val PekkoStream = "org.apache.pekko" %% "pekko-stream" % PekkoVersion
   val PekkoStreamTestkit = "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion
 
+  val PekkoProjectionVersion = "1.1.0"
+
+  val PekkoProjectionCore = "org.apache.pekko" %% "pekko-projection-core" % PekkoProjectionVersion
+  val PekkoProjectionEventSourced = "org.apache.pekko" %% "pekko-projection-eventsourced" % PekkoProjectionVersion
+  val PekkoProjectionTestkit = "org.apache.pekko" %% "pekko-projection-testkit" % PekkoProjectionVersion
+
+  val PekkoR2dbcVersion = "1.1.0"
+
+  val PekkoPersistenceR2dbc = "org.apache.pekko" %% "pekko-persistence-r2dbc" % PekkoR2dbcVersion
+  val PekkoProjectionR2dbc = "org.apache.pekko" %% "pekko-projection-r2dbc" % PekkoR2dbcVersion
+
+
   val PicoCli = "info.picocli" % "picocli" % "4.7.7"
+
+  val PostgresqlR2dbcDriver = "org.postgresql" % "r2dbc-postgresql" % "1.1.1.RELEASE"
 
   val ScalaPBVersion = "0.11.20"
   val ScalaPBRuntime = "com.thesamet.scalapb" %% "scalapb-runtime" % ScalaPBVersion
