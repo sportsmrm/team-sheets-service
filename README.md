@@ -2,7 +2,7 @@
 
 This repository contains the Sports Member Relationship Manager's Team Sheets Service.
 
-This service is completely over engineered using the CQRS with event sourcing functionality provided by 
+This service is completely overengineered using the CQRS with event sourcing functionality provided by 
 [Apache Pekko's Persistence Module](https://pekko.apache.org/docs/pekko/current/typed/persistence.html).
 
 ## Development

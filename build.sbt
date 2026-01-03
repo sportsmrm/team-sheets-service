@@ -6,7 +6,7 @@ import sbtprotoc.ProtocPlugin.autoImport.PB
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / scalaVersion := "3.7.4"
 ThisBuild / scalaBinaryVersion := "3"
 
 ThisBuild / scalacOptions ++= Seq("-Wunused:all")
