@@ -111,11 +111,18 @@ jobs:
       - name: Build Server
         shell: bash
         run: sbt -v "server / Docker / publishLocal"
-      - name: Execute BDD Tests
+      - name: Generate Secrets
         shell: bash
         run: |
           docker compose run generate_secrets
+          result=$?
+      - name: Start Server
+        shell: bash
+        run: |
           docker compose up -d server
+      - name: Run BDD Tests
+        shell: bash
+        run: |
           sbt -v "specs / cucumber"
           result=$?
           docker compose down
