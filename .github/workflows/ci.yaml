@@ -83,6 +83,8 @@ jobs:
           distribution: temurin
           java-version: 21
           cache: sbt
+      - name: Setup Scala Build Tool
+        uses: sbt/setup-sbt@v1
       - name: SBT Checks
         shell: bash
         env:
@@ -104,15 +106,18 @@ jobs:
           distribution: temurin
           java-version: 21
           cache: sbt
+      - name: Setup Scala Build Tool
+        uses: sbt/setup-sbt@v1
       - name: Build Server
         shell: bash
         run: sbt -v "server / Docker / publishLocal"
-      - name: Execute BDD Tests
+      - name: Generate Secrets
         shell: bash
         run: |
           docker compose run generate_secrets
-          docker compose up -d server
-          sbt -v "specs / cucumber"
-          result=$?
-          docker compose down
-          exit $result
+      - name: Start Server
+        shell: bash {0}
+        run: ./hack/start_server.sh
+      - name: Run BDD Tests
+        shell: bash {0}
+        run: ./hack/run_tests.sh

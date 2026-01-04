@@ -6,7 +6,7 @@ import sbtprotoc.ProtocPlugin.autoImport.PB
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / scalaVersion := "3.7.4"
 ThisBuild / scalaBinaryVersion := "3"
 
 ThisBuild / scalacOptions ++= Seq("-Wunused:all")
@@ -66,6 +66,7 @@ lazy val queries = project
       Jooq,
       PekkoProjectionEventSourced,
       PekkoProjectionR2dbc,
+      PostgresqlR2dbcDriver % Test,
       LogbackClassic % Test,
       PekkoActorTestkitTyped % Test,
       PekkoProjectionTestkit % Test,
@@ -103,6 +104,8 @@ lazy val server = (project in file("server"))
       PekkoDiscovery % Runtime,
       PekkoSerializationJackson,
       PekkoPersistenceR2dbc,
+      PostgresqlJdbcDriver,
+      PostgresqlR2dbcDriver,
       PicoCli
     ),
     pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),
