@@ -120,9 +120,10 @@ jobs:
         run: |
           docker compose up -d server
           result=$?
-          if [[ result -ne 0 ]]; then
+          if [[ $result -ne 0 ]]; then
             docker compose logs all
           fi
+          exit $result
       - name: Run BDD Tests
         shell: bash
         run: |
