@@ -104,6 +104,7 @@ lazy val server = (project in file("server"))
       PekkoDiscovery % Runtime,
       PekkoSerializationJackson,
       PekkoPersistenceR2dbc,
+      PostgresqlJdbcDriver,
       PostgresqlR2dbcDriver,
       PicoCli
     ),

@@ -41,6 +41,7 @@ object Dependencies {
 
   val PicoCli = "info.picocli" % "picocli" % "4.7.7"
 
+  val PostgresqlJdbcDriver = "org.postgresql" % "postgresql" % "42.7.8"
   val PostgresqlR2dbcDriver = "org.postgresql" % "r2dbc-postgresql" % "1.1.1.RELEASE"
 
   val ScalaPBVersion = "0.11.20"
