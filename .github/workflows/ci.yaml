@@ -116,8 +116,8 @@ jobs:
         run: |
           docker compose run generate_secrets
       - name: Start Server
-        shell: bash
+        shell: bash {0}
         run: ./hack/start_server.sh
       - name: Run BDD Tests
-        shell: bash
+        shell: bash {0}
         run: ./hack/run_tests.sh
