@@ -115,11 +115,14 @@ jobs:
         shell: bash
         run: |
           docker compose run generate_secrets
-          result=$?
       - name: Start Server
         shell: bash
         run: |
           docker compose up -d server
+          result=$?
+          if [[ result -ne 0 ]]; then
+            docker compose logs all
+          fi
       - name: Run BDD Tests
         shell: bash
         run: |
